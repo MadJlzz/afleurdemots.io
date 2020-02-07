@@ -1,4 +1,4 @@
-# A fleur de mots
+# Madlens
 
 A simple photo gallery written in Go made with ❤️ for my step sister.
 

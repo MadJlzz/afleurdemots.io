@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/madjlzz/madlens/views"
 	"net/http"
 )
@@ -15,7 +16,10 @@ func NewUsers() *Users {
 	}
 }
 
+// New is used to render the form where a user can
+// create a new user account.
 //
+// GET /signup
 func (u *Users) New(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	if err := u.NewView.Render(w, nil); err != nil {
@@ -25,4 +29,12 @@ func (u *Users) New(w http.ResponseWriter, r *http.Request) {
 
 type Users struct {
 	NewView *views.View
+}
+
+// Create is used to process the signup form when a user
+// submits it. This is used to create a new user account.
+//
+// POST /signup
+func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "This is a temporary response.")
 }

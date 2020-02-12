@@ -16,6 +16,8 @@ var (
 	ErrInvalidID = errors.New("models: ID provided was invalid")
 )
 
+const userPasswordPepper string = "bgxTOwGmgLlLQkFvCxjV"
+
 func NewUserService(connectionInfo string) (*UserService, error) {
 	db, err := gorm.Open("postgres", connectionInfo)
 	if err != nil {
@@ -78,7 +80,8 @@ func first(db *gorm.DB, dst interface{}) error {
 // Create will create the provided user and backfill data
 // like the ID, CreatedAt and UpdatedAt fields.
 func (us *UserService) Create(user *User) error {
-	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	pwdBytes := []byte(user.Password + userPasswordPepper)
+	hashedBytes, err := bcrypt.GenerateFromPassword(pwdBytes, bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
@@ -125,8 +128,8 @@ func (us *UserService) AutoMigrate() error {
 
 type User struct {
 	gorm.Model
-	Name string
-	Email string `gorm:"not null;unique_index"`
-	Password string `gorm:"-"`
+	Name         string
+	Email        string `gorm:"not null;unique_index"`
+	Password     string `gorm:"-"`
 	PasswordHash string `gorm:"not null"`
 }

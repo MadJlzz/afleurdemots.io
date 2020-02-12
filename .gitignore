@@ -112,4 +112,7 @@ fabric.properties
 # Sonarlint plugin
 .idea/sonarlint
 
+# MadJlzz experimental folder
+exp/
+
 # End of https://www.gitignore.io/api/go,intellij+all

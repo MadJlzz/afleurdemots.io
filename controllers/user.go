@@ -12,7 +12,7 @@ import (
 // This function will panic if templates are not
 // parsed correctly, and should only be used during
 // initial setup.
-func NewUsers(us *models.UserService) *Users {
+func NewUsers(us models.UserService) *Users {
 	return &Users{
 		NewView: views.NewView("bootstrap", "users/new"),
 		LoginView: views.NewView("bootstrap", "users/login"),
@@ -34,7 +34,7 @@ func (u *Users) New(w http.ResponseWriter, r *http.Request) {
 type Users struct {
 	NewView *views.View
 	LoginView *views.View
-	us *models.UserService
+	us models.UserService
 }
 
 type SignupForm struct {

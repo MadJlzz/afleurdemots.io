@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"github.com/jinzhu/gorm"
 	"github.com/madjlzz/madlens/hash"
 	"github.com/madjlzz/madlens/rand"
@@ -10,48 +9,6 @@ import (
 	"strings"
 )
 import _ "github.com/jinzhu/gorm/dialects/postgres"
-
-var (
-	// ErrNotFound is return when a resource cannot be found
-	// in a database.
-	ErrNotFound = errors.New("models: resource not found")
-
-	// ErrInvalidID is returned when an invalid ID is provided
-	// to a method like Delete.
-	ErrInvalidID = errors.New("models: ID provided was invalid")
-
-	// ErrPasswordIncorrect is returned when an invalid password
-	// is used when attempting to authenticate a user.
-	ErrPasswordIncorrect = errors.New("models: incorrect password provided")
-
-	// ErrEmailRequired is return when an empty email
-	// is passed mainly during registration.
-	ErrEmailRequired = errors.New("models: email address is required")
-
-	// ErrEmailInvalid is returned when the email format
-	// passed in does not match emailRegex.
-	ErrEmailInvalid = errors.New("models: email address is not valid")
-
-	// ErrEmailTaken is returned when an update or create
-	// is attempted with an email address that is already in use.
-	ErrEmailTaken = errors.New("models: email address is already taken")
-
-	// ErrPasswordTooShort is returned when an update or create is
-	// attempted with a user password that is less than 8 characters
-	ErrPasswordTooShort = errors.New("models: password must be at least 8 characters long")
-
-	// ErrPasswordRequired is returned when a create is attempted
-	// without a user password provided
-	ErrPasswordRequired = errors.New("models: password is required")
-
-	// ErrRememberTooShort is returned when a remember token is not at least
-	// 32 bytes
-	ErrRememberTooShort = errors.New("models: remember token must be at least 32 bytes")
-
-	// ErrPasswordRequired is returned when a create or update is attempted
-	// without a valid user remember token hash
-	ErrRememberRequired = errors.New("models: remember token is required")
-)
 
 const minPasswordLength int = 8
 

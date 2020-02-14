@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	host = "localhost"
-	port = 5432
-	user = "postgres"
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
 	password = "password"
-	dbname = "madlens_dev"
+	dbname   = "madlens_dev"
 )
 
 func main() {
@@ -35,7 +35,7 @@ func main() {
 	r := mux.NewRouter()
 	r.Handle("/", staticC.Home).Methods("GET")
 	r.Handle("/contact", staticC.Contact).Methods("GET")
-	r.Handle("/signup", usersC.NewView).Methods("GET")
+	r.HandleFunc("/signup", usersC.New).Methods("GET")
 	r.HandleFunc("/signup", usersC.Create).Methods("POST")
 	r.Handle("/login", usersC.LoginView).Methods("GET")
 	r.HandleFunc("/login", usersC.Login).Methods("POST")

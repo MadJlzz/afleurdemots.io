@@ -5,6 +5,7 @@ import (
 	"github.com/madjlzz/madlens/models"
 	"github.com/madjlzz/madlens/rand"
 	"github.com/madjlzz/madlens/views"
+	"log"
 	"net/http"
 )
 
@@ -14,9 +15,9 @@ import (
 // initial setup.
 func NewUsers(us models.UserService) *Users {
 	return &Users{
-		NewView: views.NewView("bootstrap", "users/new"),
+		NewView:   views.NewView("bootstrap", "users/new"),
 		LoginView: views.NewView("bootstrap", "users/login"),
-		us: us,
+		us:        us,
 	}
 }
 
@@ -25,21 +26,20 @@ func NewUsers(us models.UserService) *Users {
 //
 // GET /signup
 func (u *Users) New(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
 	if err := u.NewView.Render(w, nil); err != nil {
 		panic(err)
 	}
 }
 
 type Users struct {
-	NewView *views.View
+	NewView   *views.View
 	LoginView *views.View
-	us models.UserService
+	us        models.UserService
 }
 
 type SignupForm struct {
-	Name string `schema:"name"`
-	Email string `schema:"email"`
+	Name     string `schema:"name"`
+	Email    string `schema:"email"`
 	Password string `schema:"password"`
 }
 
@@ -48,29 +48,40 @@ type SignupForm struct {
 //
 // POST /signup
 func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
+	var vd views.Data
 	var form SignupForm
 	if err := parseForm(r, &form); err != nil {
-		panic(err)
+		log.Println(err)
+		vd.Alert = &views.Alert{
+			Level:   views.AlertLevelError,
+			Message: views.AlertMessageGeneric,
+		}
+		u.NewView.Render(w, vd)
+		return
 	}
 	user := models.User{
-		Name:  form.Name,
-		Email: form.Email,
+		Name:     form.Name,
+		Email:    form.Email,
 		Password: form.Password,
 	}
 	if err := u.us.Create(&user); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		vd.Alert = &views.Alert{
+			Level:   views.AlertLevelError,
+			Message: err.Error(),
+		}
+		u.NewView.Render(w, vd)
 		return
 	}
 	err := u.signIn(w, &user)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
 	fmt.Fprintln(w, user)
 }
 
 type LoginForm struct {
-	Email string `schema:"email"`
+	Email    string `schema:"email"`
 	Password string `schema:"password"`
 }
 
@@ -118,8 +129,8 @@ func (u *Users) signIn(w http.ResponseWriter, user *models.User) error {
 		}
 	}
 	cookie := http.Cookie{
-		Name: "remember_token",
-		Value: user.Remember,
+		Name:     "remember_token",
+		Value:    user.Remember,
 		HttpOnly: true,
 	}
 	http.SetCookie(w, &cookie)

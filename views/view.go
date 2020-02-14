@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	LayoutDir string = "views/layouts/"
+	LayoutDir   string = "views/layouts/"
 	TemplateDir string = "views/"
 	TemplateExt string = ".gohtml"
 )
@@ -22,24 +22,33 @@ func NewView(layout string, files ...string) *View {
 	}
 	return &View{
 		Template: t,
-		Layout: layout,
+		Layout:   layout,
 	}
 }
 
 func (v *View) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if err := v.Render(w, r); err != nil {
+	if err := v.Render(w, nil); err != nil {
 		panic(err)
 	}
 }
 
 // Render is used to render the view with the predefined layout.
 func (v *View) Render(w http.ResponseWriter, data interface{}) error {
+	w.Header().Set("Content-Type", "text/html")
+	switch data.(type) {
+	case Data:
+		// do nothing
+	default:
+		data = Data{
+			Yield: data,
+		}
+	}
 	return v.Template.ExecuteTemplate(w, v.Layout, data)
 }
 
 type View struct {
 	Template *template.Template
-	Layout string
+	Layout   string
 }
 
 // layoutFiles returns a slice of strings representing

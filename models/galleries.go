@@ -32,9 +32,44 @@ type galleryValidator struct {
 	GalleryDB
 }
 
+type galleryValidatorFn func(user *Gallery) error
+
+func runGalleryValidators(gallery *Gallery, fns ...galleryValidatorFn) error {
+	for _, fn := range fns {
+		if err := fn(gallery); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (gv *galleryValidator) Create(gallery *Gallery) error {
+	err := runGalleryValidators(gallery,
+		gv.titleRequired,
+		gv.userIDRequired,
+	)
+	if err != nil {
+		return err
+	}
+	return gv.GalleryDB.Create(gallery)
+}
+
+func (gv *galleryValidator) userIDRequired(g *Gallery) error {
+	if g.UserID <= 0 {
+		return ErrUserIDRequired
+	}
+	return nil
+}
+
+func (gv *galleryValidator) titleRequired(g *Gallery) error {
+	if g.Title == "" {
+		return ErrTitleRequired
+	}
+	return nil
+}
+
 type GalleryDB interface {
 	Create(gallery *Gallery) error
-
 }
 
 var _ GalleryDB = &galleryGorm{}

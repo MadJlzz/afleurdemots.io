@@ -22,7 +22,7 @@ func Bytes(n int) ([]byte, error) {
 // NBytes returns the number of bytes used in the
 // base64 URL encoded string.
 func NBytes(base64String string) (int, error) {
-	b ,err := base64.URLEncoding.DecodeString(base64String)
+	b, err := base64.URLEncoding.DecodeString(base64String)
 	if err != nil {
 		return -1, nil
 	}

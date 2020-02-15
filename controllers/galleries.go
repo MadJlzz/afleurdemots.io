@@ -12,17 +12,17 @@ import (
 func NewGalleries(gs models.GalleryService) *Galleries {
 	return &Galleries{
 		New: views.NewView("bootstrap", "galleries/new"),
-		gs: gs,
+		gs:  gs,
 	}
 }
 
 type Galleries struct {
 	New *views.View
-	gs models.GalleryService
+	gs  models.GalleryService
 }
 
 type GalleryForm struct {
-	Title     string `schema:"title"`
+	Title string `schema:"title"`
 }
 
 // POST /galleries
@@ -37,7 +37,7 @@ func (g *Galleries) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	user := context.User(r.Context())
 	gallery := models.Gallery{
-		Title:     form.Title,
+		Title:  form.Title,
 		UserID: user.ID,
 	}
 	if err := g.gs.Create(&gallery); err != nil {

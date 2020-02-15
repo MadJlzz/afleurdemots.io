@@ -28,7 +28,7 @@ type User struct {
 	Email        string `gorm:"not null;unique_index"`
 	Password     string `gorm:"-"`
 	PasswordHash string `gorm:"not null"`
-	Remember string `gorm:"-"`
+	Remember     string `gorm:"-"`
 	RememberHash string `gorm:"not null;unique_index"`
 }
 
@@ -69,7 +69,7 @@ type UserService interface {
 }
 
 func NewUserService(db *gorm.DB) UserService {
-	ug := &userGorm{db:db}
+	ug := &userGorm{db: db}
 	hmac := hash.NewHMAC(hmacSecretKey)
 	uv := newUserValidator(ug, hmac)
 	return &userService{
@@ -98,7 +98,7 @@ func (us *userService) Authenticate(email, password string) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(foundUser.PasswordHash), []byte(password + userPasswordPepper))
+	err = bcrypt.CompareHashAndPassword([]byte(foundUser.PasswordHash), []byte(password+userPasswordPepper))
 	if err != nil {
 		switch err {
 		case bcrypt.ErrMismatchedHashAndPassword:
@@ -114,7 +114,7 @@ var _ UserDB = &userValidator{}
 
 type userValidator struct {
 	UserDB
-	hmac hash.HMAC
+	hmac       hash.HMAC
 	emailRegex *regexp.Regexp
 }
 

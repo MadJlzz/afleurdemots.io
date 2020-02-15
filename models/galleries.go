@@ -6,8 +6,8 @@ import "github.com/jinzhu/gorm"
 // that visitors view.
 type Gallery struct {
 	gorm.Model
-	UserID uint `gorm:"not null;index"`
-	Title string `gorm:"not null"`
+	UserID uint   `gorm:"not null;index"`
+	Title  string `gorm:"not null"`
 }
 
 type GalleryService interface {
@@ -78,6 +78,6 @@ type galleryGorm struct {
 	db *gorm.DB
 }
 
-func (gg * galleryGorm) Create(gallery *Gallery) error {
+func (gg *galleryGorm) Create(gallery *Gallery) error {
 	return gg.db.Create(gallery).Error
 }

@@ -9,16 +9,16 @@ func NewServices(connectionInfo string) (*Services, error) {
 	}
 	db.LogMode(true)
 	return &Services{
-		User: NewUserService(db),
+		User:    NewUserService(db),
 		Gallery: NewGalleryService(db),
-		db: db,
+		db:      db,
 	}, nil
 }
 
 type Services struct {
 	Gallery GalleryService
-	User UserService
-	db *gorm.DB
+	User    UserService
+	db      *gorm.DB
 }
 
 // Closes the database connection.

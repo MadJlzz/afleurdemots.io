@@ -46,7 +46,6 @@ const (
 	// ErrInvalidID is returned when an invalid ID is provided
 	// to a method like Delete.
 	ErrInvalidID privateError = "models: ID provided was invalid"
-
 )
 
 type modelError string

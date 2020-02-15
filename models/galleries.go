@@ -54,6 +54,17 @@ func (gv *galleryValidator) Create(gallery *Gallery) error {
 	return gv.GalleryDB.Create(gallery)
 }
 
+func (gv *galleryValidator) Update(gallery *Gallery) error {
+	err := runGalleryValidators(gallery,
+		gv.titleRequired,
+		gv.userIDRequired,
+	)
+	if err != nil {
+		return err
+	}
+	return gv.GalleryDB.Update(gallery)
+}
+
 func (gv *galleryValidator) userIDRequired(g *Gallery) error {
 	if g.UserID <= 0 {
 		return ErrUserIDRequired
@@ -71,12 +82,17 @@ func (gv *galleryValidator) titleRequired(g *Gallery) error {
 type GalleryDB interface {
 	Create(gallery *Gallery) error
 	ByID(id uint) (*Gallery, error)
+	Update(gallery *Gallery) error
 }
 
 var _ GalleryDB = &galleryGorm{}
 
 type galleryGorm struct {
 	db *gorm.DB
+}
+
+func (gg *galleryGorm) Update(gallery *Gallery) error {
+	return gg.db.Save(gallery).Error
 }
 
 func (gg *galleryGorm) ByID(id uint) (*Gallery, error) {

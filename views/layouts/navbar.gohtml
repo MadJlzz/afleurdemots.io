@@ -14,9 +14,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/contact">Contact</a>
                 </li>
+                {{ if .User }}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/galleries">Galleries</a>
+                    </li>
+                {{ end }}
             </ul>
-            <a class="nav-link" href="/login">Log In</a>
-            <a class="nav-link" href="/signup">Sign Up</a>
+            {{ if .User }}
+                <span class="navbar-text">Hello, {{.User.Name }}</span>
+            {{ else }}
+                <a class="nav-link" href="/login">Log In</a>
+                <a class="nav-link" href="/signup">Sign Up</a>
+            {{ end }}
         </div>
     </nav>
 {{ end }}

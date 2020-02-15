@@ -1,5 +1,7 @@
 package views
 
+import "github.com/madjlzz/madlens/models"
+
 const (
 	AlertLevelError   string = "danger"
 	AlertLevelWarning string = "warning"
@@ -21,6 +23,7 @@ type Alert struct {
 // to come in.
 type Data struct {
 	Alert *Alert
+	User  *models.User
 	Yield interface{}
 }
 

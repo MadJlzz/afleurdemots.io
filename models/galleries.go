@@ -101,6 +101,7 @@ func (gv *galleryValidator) idGreaterThan(n uint) galleryValidatorFn {
 type GalleryDB interface {
 	Create(gallery *Gallery) error
 	ByID(id uint) (*Gallery, error)
+	ByUserID(userID uint) ([]Gallery, error)
 	Update(gallery *Gallery) error
 	Delete (id uint) error
 }
@@ -109,6 +110,12 @@ var _ GalleryDB = &galleryGorm{}
 
 type galleryGorm struct {
 	db *gorm.DB
+}
+
+func (gg *galleryGorm) ByUserID(userID uint) ([]Gallery, error) {
+	var galleries []Gallery
+	gg.db.Where("user_id = ?", userID).Find(&galleries)
+	return galleries, nil
 }
 
 func (gg *galleryGorm) Delete(id uint) error {

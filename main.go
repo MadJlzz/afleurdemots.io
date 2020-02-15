@@ -51,6 +51,7 @@ func main() {
 	r.Handle("/galleries/new", requireUserMiddleware.Apply(galleriesC.New)).Methods("GET")
 	r.HandleFunc("/galleries", requireUserMiddleware.ApplyFn(galleriesC.Create)).Methods("POST")
 	r.HandleFunc("/galleries/{id:[0-9]+}", galleriesC.Show).Methods("GET").Name(controllers.ShowGalleryName)
+	r.HandleFunc("/galleries/{id:[0-9]+}/edit", requireUserMiddleware.ApplyFn(galleriesC.Edit)).Methods("GET")
 
 	fmt.Println("Starting the server on :3000...")
 	http.ListenAndServe(":3000", r)

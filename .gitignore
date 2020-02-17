@@ -114,5 +114,6 @@ fabric.properties
 
 # MadJlzz experimental folder
 exp/
+images/
 
 # End of https://www.gitignore.io/api/go,intellij+all

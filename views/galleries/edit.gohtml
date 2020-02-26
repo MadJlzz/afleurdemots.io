@@ -55,11 +55,12 @@
 {{ define "galleryImages" }}
     <div class="row">
     {{ range .ImagesSplitN 6 }}
-        <div class="col-md-2">
+        <div class="col-md-2 mb-3">
             {{ range . }}
-                <a href="{{.}}">
-                    <img src="{{.}}" class="thumbnail">
+                <a href="{{.Path}}">
+                    <img src="{{.Path}}" class="thumbnail">
                 </a>
+                {{ template "deleteImageForm" . }}
             {{ end }}
         </div>
     {{ end }}
@@ -67,6 +68,7 @@
     <style>
         .thumbnail {
             width: 100%;
+            margin-bottom: 6px;
         }
     </style>
 {{ end }}
@@ -91,5 +93,11 @@
         <div class="form-group">
             <button type="submit" class="btn btn-danger">Delete</button>
         </div>
+    </form>
+{{ end }}
+
+{{ define "deleteImageForm" }}
+    <form action="/galleries/{{.GalleryID}}/images/{{.Filename}}/delete" method="POST">
+        <button type="submit" class="btn btn-primary">Delete</button>
     </form>
 {{ end }}

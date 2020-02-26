@@ -1,6 +1,9 @@
 package views
 
-import "github.com/madjlzz/madlens/models"
+import (
+	"github.com/madjlzz/madlens/models"
+	"log"
+)
 
 const (
 	AlertLevelError   string = "danger"
@@ -34,6 +37,7 @@ func (d *Data) SetAlert(err error) {
 			Message: pErr.Public(),
 		}
 	} else {
+		log.Println(err)
 		d.Alert = &Alert{
 			Level:   AlertLevelError,
 			Message: AlertMessageGeneric,
